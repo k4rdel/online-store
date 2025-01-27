@@ -1,11 +1,19 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
+from forms import RegistrationForm
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        # Zapisz dane do bazy danych
+        return redirect(url_for('home'))
+    return render_template('register.html', form=form)
+
 def home():
-    return "Hello, Render!"
+    return render_template('index.html')
 
 if __name__ == "__main__":
     # Pobierz port z zmiennej środowiskowej lub ustaw domyślny na 8080
