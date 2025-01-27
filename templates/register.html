@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rejestracja</title>
+</head>
+<body>
+    <h1>Rejestracja użytkownika</h1>
+    
+    <form method="POST" action="{{ url_for('register') }}">
+        {{ form.hidden_tag() }}
+        
+        <div>
+            <label for="username">Nazwa użytkownika:</label>
+            {{ form.username() }}
+            {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="email">Email:</label>
+            {{ form.email() }}
+            {% if form.email.errors %}
+                {% for error in form.email.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="password">Hasło:</label>
+            {{ form.password() }}
+            {% if form.password.errors %}
+                {% for error in form.password.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div>
+            <label for="confirm">Powtórz hasło:</label>
+            {{ form.confirm() }}
+            {% if form.confirm.errors %}
+                {% for error in form.confirm.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div>
+            <button type="submit">Zarejestruj</button>
+        </div>
+    </form>
+
+    <p><a href="{{ url_for('home') }}">Powrót do strony głównej</a></p>
+</body>
+</html>
