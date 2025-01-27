@@ -1,9 +1,12 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, request
 from forms import RegistrationForm, LoginForm
 from models import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from dotenv import load_dotenv
+
+load_dotenv()  # Załaduj zmienne środowiskowe z pliku .env
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -29,7 +32,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'Konto utworzone dla {form.username.data}!', 'success')
-        return redirect(url_for('register'))
+        return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -51,7 +54,6 @@ def logout():
     logout_user()
     flash('Wylogowano pomyślnie!', 'success')
     return redirect(url_for('login'))
-
 
 @app.route('/home')
 @login_required
