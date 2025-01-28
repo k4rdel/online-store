@@ -5,11 +5,10 @@ from models import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from dotenv import load_dotenv
-from sqlalchemy.orm import Session
 
 load_dotenv()  # Załaduj zmienne środowiskowe z pliku .env
 
-app = Flask(__name__)
+app = Flask(__name__, instance_relative_config=True)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,9 +21,8 @@ login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    with Session(db.engine) as session:
-        return session.get(User, user_id)
-    
+    return User.query.get(int(user_id))
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
