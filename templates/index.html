@@ -7,5 +7,22 @@
 </head>
 <body>
     <h1>Welcome to the Online Store</h1>
+    {% if current_user.is_authenticated %}
+        <p>Witaj, {{ current_user.username }}!</p>
+        <a href="{{ url_for('logout') }}">
+            <button>Wyloguj</button>
+        </a>
+    {% else %}
+        <div>
+            <a href="{{ url_for('register') }}">
+                <button>Rejestruj</button>
+            </a>
+        </div>
+        <div>
+            <a href="{{ url_for('login') }}">
+                <button>Loguj</button>
+            </a>
+        </div>
+    {% endif %}
 </body>
 </html>

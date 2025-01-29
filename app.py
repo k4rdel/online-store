@@ -27,12 +27,16 @@ def load_user(user_id):
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data)
-        user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash(f'Konto utworzone dla {form.username.data}!', 'success')
-        return redirect(url_for('login'))
+        existing_user = User.query.filter((User.username == form.username.data) | (User.email == form.email.data)).first()
+        if existing_user:
+            flash('Nazwa użytkownika lub adres e-mail już istnieje', 'danger')
+        else:
+            hashed_password = generate_password_hash(form.password.data, method='pbkdf2:sha256', salt_length=16)
+            user = User(username=form.username.data, email=form.email.data, password=hashed_password)
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Konto utworzone dla {form.username.data}!', 'success')
+            return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -53,12 +57,12 @@ def login():
 def logout():
     logout_user()
     flash('Wylogowano pomyślnie!', 'success')
-    return redirect(url_for('login'))
+    return render_template('index.html')
 
 @app.route('/home')
 @login_required
 def home():
-    return f'Witaj, {current_user.username}!'
+    return render_template('index.html')
 
 @app.route('/')
 def index():
@@ -67,5 +71,5 @@ def index():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    port = int(os.environ.get('PORT', 5000))
+    port = int(os.environ.get('PORT', 10000))
     app.run(host='0.0.0.0', port=port, debug=True)

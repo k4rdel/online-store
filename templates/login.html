@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Logowanie</h1>
-    
+
     <form method="POST" action="{{ url_for('login') }}">
         {{ form.hidden_tag() }}
         
@@ -31,11 +31,32 @@
             {% endif %}
         </div>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul id="flash-messages">
+                {% for category, message in messages %}
+                    {% if category == 'danger' %}
+                        <li class="flash-message {{ category }}">{{ message }}</li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
         <div>
             <button type="submit">Zaloguj</button>
         </div>
     </form>
 
     <p><a href="{{ url_for('register') }}">Rejestracja</a></p>
+
+    <script>
+        function showFlashMessages() {
+            var flashMessages = document.querySelectorAll('.flash-message');
+            flashMessages.forEach(function(message) {
+                message.style.display = 'block';
+            });
+        }
+    </script>
 </body>
 </html>
