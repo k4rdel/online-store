@@ -4,25 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>Welcome to the Online Store</h1>
-    {% if current_user.is_authenticated %}
-        <p>Witaj, {{ current_user.username }}!</p>
-        <a href="{{ url_for('logout') }}">
-            <button>Wyloguj</button>
-        </a>
-    {% else %}
-        <div>
-            <a href="{{ url_for('register') }}">
-                <button>Rejestruj</button>
-            </a>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="{{ url_for('home')}}" class="navbar-brand">Simple Store</a>
+            </div>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('logout') }}">Wyloguj</a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Rejestruj</a></li>
+                        <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Loguj</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-        <div>
-            <a href="{{ url_for('login') }}">
-                <button>Loguj</button>
-            </a>
-        </div>
-    {% endif %}
+    </nav>
 </body>
 </html>

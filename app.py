@@ -60,7 +60,6 @@ def logout():
     return render_template('index.html')
 
 @app.route('/home')
-@login_required
 def home():
     return render_template('index.html')
 
