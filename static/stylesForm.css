@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+html {
+    scrollbar-color: #555 #141414;
+    scroll-behavior: smooth;
+}
+
+body{ 
+    background-color: #141414;
+    font-family: "Montserrat", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    color: rgb(235, 235, 235);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+p, li{
+    color: red;
+}
+
+ul {
+    list-style-type: none;
+}  
+
+.firstText{
+    color: rgb(235, 235, 235);
+}
+
+/* login form */
+
+#loginForm{
+    width: 100%;
+    max-width: 50vh;
+    height: 47vh;
+    margin: 0 auto;
+    padding: 5vh;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgb(20, 20, 20);
+}
+
+#loginForm a{
+    color: rgb(117, 36, 192);
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+#loginForm a:hover{
+    color: rgb(145, 74, 211);
+    transition: 0.5s;
+}
+
+#loginForm input[type="text"],
+#loginForm input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0 5px 0;
+    display: inline-block;
+    border: 1px solid rgb(117, 36, 192);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #1a1a1a;
+    transition: 0.5s;
+}
+
+#loginForm input[type="submit"]{
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0 5px 0;
+    display: inline-block;
+    border: 1px solid rgb(117, 36, 192);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: rgb(117, 36, 192);
+    transition: 0.5s;
+}
+
+#loginForm input[type="submit"]:hover{
+    border: 1px solid rgb(145, 74, 211);
+    background-color: rgb(145, 74, 211);
+}
+
+.back{
+    color: rgb(117, 36, 192);
+    text-align: center;
+    transition: 0.5s;
+}
+
+/* register form */
+
+#registerForm{
+    width: 100%;
+    max-width: 50vh;
+    height: 60vh;
+    margin: 0 auto;
+    padding: 5vh;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 0 25px rgb(20, 20, 20);
+}
+
+#registerForm a{
+    color: rgb(117, 36, 192);
+    transition: 0.5s;
+    text-decoration: none;
+}
+
+#registerForm a:hover{
+    color: rgb(145, 74, 211);
+    transition: 0.5s;
+}
+
+#registerForm input[type="text"],
+#registerForm input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0 5px 0;
+    display: inline-block;
+    border: 1px solid rgb(117, 36, 192);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #1a1a1a;
+    transition: 0.5s;
+}
+
+#registerForm input[type="submit"]{
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0 5px 0;
+    display: inline-block;
+    border: 1px solid rgb(117, 36, 192);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: rgb(117, 36, 192);
+    transition: 0.5s;
+}
+
+#registerForm input[type="submit"]:hover{
+    border: 1px solid rgb(145, 74, 211);
+    background-color: rgb(145, 74, 211);
+}

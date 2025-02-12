@@ -3,56 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logowanie</title>
+    <title>Sing in</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/stylesForm.css">
 </head>
 <body>
-    <h1>Logowanie</h1>
-
-    <form method="POST" action="{{ url_for('login') }}">
-        {{ form.hidden_tag() }}
-        
-        <div>
-            <label for="email">Email:</label>
-            {{ form.email() }}
-            {% if form.email.errors %}
-                {% for error in form.email.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endif %}
+    <div class="container">
+        <div id="loginForm">
+            <h1>Sing in</h1>
+            <p class="firstText">Don't have an account? <a href="{{ url_for('register') }}">Sing up</a></p>
+            <form method="POST" action="{{ url_for('login') }}">
+            {{ form.hidden_tag() }}
+            
+            <div>
+                {{ form.email(placeholder="Email") }}
+                {% if form.email.errors %}
+                    {% for error in form.email.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+    
+            <div>
+                {{ form.password(placeholder="Password") }}
+                {% if form.password.errors %}
+                    {% for error in form.password.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+    
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul id="flash-messages">
+                    {% for category, message in messages %}
+                        {% if category == 'danger' %}
+                            <li class="flash-message {{ category }}">{{ message }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+    
+            <div>
+                <input type="submit" value="Login"></input>
+            </div>
+            </form>
+            <p class="back"><a class="btn" href="{{ url_for('home') }}">Back to home</a></p>
         </div>
-
-        <div>
-            <label for="password">Hasło:</label>
-            {{ form.password() }}
-            {% if form.password.errors %}
-                {% for error in form.password.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endif %}
-        </div>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                <ul id="flash-messages">
-                {% for category, message in messages %}
-                    {% if category == 'danger' %}
-                        <li class="flash-message {{ category }}">{{ message }}</li>
-                    {% endif %}
-                {% endfor %}
-                </ul>
-            {% endif %}
-        {% endwith %}
-
-        <div>
-            <button type="submit">Zaloguj</button>
-        </div>
-    </form>
-
-    <p><a href="{{ url_for('register') }}">Rejestracja</a></p>
-    <p><a href="{{ url_for('home') }}">Powrót do strony głównej</a></p>
+    </div>
 
     <script>
         function showFlashMessages() {

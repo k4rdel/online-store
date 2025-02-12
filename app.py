@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import Flask, render_template, redirect, url_for, flash, request, session
 from forms import RegistrationForm, LoginForm
 from models import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -46,6 +46,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
+            session['username'] = user.username
             flash('Zalogowano pomyślnie!', 'success')
             return redirect(url_for('home'))
         else:

@@ -7,23 +7,265 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="/static/main.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
-    <nav class="navbar navbar-inverse">
+    <nav id="navbar" class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a href="{{ url_for('home')}}" class="navbar-brand">Simple Store</a>
             </div>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
-                        <li><a href="{{ url_for('logout') }}">Wyloguj</a></li>
+                        <li><a href=""><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
+                        <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logut</a></li>
                         {% else %}
-                        <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Rejestruj</a></li>
-                        <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Loguj</a></li>
+                        <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                        <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                     {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
+
+    <div class="container">
+        <div id="landspace" class="row">
+            <div class="col-lg-6">
+                <h1>Build Your Dream PC!</h1>
+                <p>High-performance components for gamers, creators, and professionals.</p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <a class="btn" id="shopNowButton" href="#">Shop now</a>
+                    </div>
+                    <div class="col-lg-6">
+                        <a class="btn float-right" href="#products">Learn more</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img onclick="animateTada()" id="pcPhoto" src="/static/images/PcPicture.png" alt="pc image">
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row" id="products">
+            <div class="col-lg-12">
+                <h1 style="font-size: 5vh; margin-bottom: 6vh; text-align: center;">Products</h1>
+            </div>
+        </div>
+        <div class="row productsRow">
+            <div class="col-lg-3 product">
+                <img src="/static/images/motherboard.png" alt="motherboard">
+                <h1>Motherboards</h1>
+            </div>
+            <div class="col-lg-3 product">
+                <img src="/static/images/graphiccard.png" alt="motherboard">
+                <h1>GPU</h1>
+            </div>
+            <div class="col-lg-3 product">
+                <img src="/static/images/harddisk.png" alt="motherboard">
+                <h1>Hard disks</h1>
+            </div>
+            <div class="col-lg-3 product">
+                <img src="/static/images/computercase.png" alt="motherboard">
+                <h1>Computer cases</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" style="display: flex; justify-content: center; align-items: center;">
+                <a class="btn seeAll" href="#">See all</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="pcsets" class="row table-responsive">
+            <div class="col-lg-12 tekst">
+                <h1>Our Ready PC Sets</h1>
+                <p>Find the Perfect Match for Your Needs</p>
+            </div>
+            <div class="col-lg-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Set Name</th>
+                            <th>Processor</th>
+                            <th>Graphics Card</th>
+                            <th>RAM</th>
+                            <th>Storage</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Gaming Beast</strong></td>
+                            <td>Intel i9</td>
+                            <td>NVIDIA RTX 3080</td>
+                            <td>32GB DDR4</td>
+                            <td>1TB SSD + 2TB HDD</td>
+                            <td style="color: rgb(142, 60, 219);">$2500</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Office Pro</strong></td>
+                            <td>Intel i5</td>
+                            <td>Integrated Graphics</td>
+                            <td>16GB DDR4</td>
+                            <td>512GB SSD</td>
+                            <td style="color: rgb(142, 60, 219);">$800</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Creative Studio</strong></td>
+                            <td>AMD Ryzen 7</td>
+                            <td>AMD Radeon RX 6800</td>
+                            <td>32GB DDR4</td>
+                            <td>1TB SSD + 4TB HDD</td>
+                            <td style="color: rgb(142, 60, 219);">$2200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Budget Build</strong></td>
+                            <td>Intel i3</td>
+                            <td>Integrated Graphics</td>
+                            <td>8GB DDR4</td>
+                            <td>256GB SSD</td>
+                            <td style="color: rgb(142, 60, 219);">$500</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12" style="display: flex; justify-content: center; align-items: center;">
+                <a class="btn seeAll" style="margin: 0 !important;" href="#">See more</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="tutorial" class="row">
+            <div class="col-lg-12">
+                <h1>How to Build a PC?</h1>
+                <p>Not sure where to start? This video will guide you through every step!</p>
+            </div>
+            <div class="col-lg-12">
+                <iframe width="100%" height="630" src="https://www.youtube.com/embed/PXaLc9AYIcg?si=br5DVkC6gSTpLeS9" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 style="font-size: 5vh; margin-top: 15vh;">Reviews</h1>
+            </div>
+        </div>
+        <div class="row testimonials">
+            <div class="col-lg-4 testimonial">
+                <img class="img-circle" src="https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="person1">
+                <h2>Gunhild Wanda</h2>
+                <div class="rating" style="color: rgb(142, 60, 219);">
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star-o"></span> 
+                </div>
+                <div data-coreui-toggle="rating" data-coreui-value="3"></div>
+                <p>‶ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed massa gravida, fermentum sem nec, tristique eros. Pellentesque eleifend tincidunt mattis. Suspendisse potenti. Etiam sed ex pellentesque erat ornare tempor.</p>
+            </div>
+            <div class="col-lg-4 testimonial">
+                <img class="img-circle" src="https://images.pexels.com/photos/5648100/pexels-photo-5648100.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="person1">
+                <h2>Lovel Želimir</h2>
+                <div class="rating" style="color: rgb(142, 60, 219);">
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span> 
+                </div>
+                <div data-coreui-toggle="rating" data-coreui-value="3"></div>
+                <p>‶ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed massa gravida, fermentum sem nec, tristique eros. Pellentesque eleifend tincidunt mattis. Suspendisse potenti. Etiam sed ex pellentesque erat ornare tempor.</p>
+            </div>
+            <div class="col-lg-4 testimonial">
+                <img class="img-circle" src="https://images.pexels.com/photos/5876695/pexels-photo-5876695.jpeg" alt="person1">
+                <h2>Zyanya Muirenn</h2>
+                <div class="rating" style="color: rgb(142, 60, 219);">
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star"></span>
+                    <span class="fa fa-star-o"></span> 
+                    <span class="fa fa-star-o"></span> 
+                </div>
+                <div data-coreui-toggle="rating" data-coreui-value="3"></div>
+                <p>‶ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed massa gravida, fermentum sem nec, tristique eros. Pellentesque eleifend tincidunt mattis. Suspendisse potenti. Etiam sed ex pellentesque erat ornare tempor.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="contact" class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Contact Us</h2>
+                <p class="text-muted">We'd love to hear from you! Reach out to us for any inquiries or assistance.</p>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <img src="/static/images/sendMessage.png" alt="send message">
+            </div>
+            <div class="col-lg-6">
+                <form>
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea class="form-control" id="message" rows="4" placeholder="Write your message"></textarea>
+                    </div>
+                    <button type="submit" class="btn mt-3 w-100 disabled">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                    <h5>About Us</h5>
+                    <p>We provide high-quality PC components and build guides for gamers, creators, and professionals.</p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#navbar">Home</a></li>
+                        <li><a href="#">Shop</a></li>
+                        <li><a href="#tutorial">How to Build PC</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                    <h5>Follow Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/k4rdel/" class="social-icon"><i class="fa fa-lg fa-github"></i> Github</a></li>
+                        <li><a href="https://www.linkedin.com/in/oskar-sodel-80b363299/" class="social-icon"><i class="fa fa-lg fa-linkedin"></i> Linkedin</a></li>
+                        <li><a href="mailto:sodeloskar22@gmail.com" class="social-icon"><i class="fa fa-lg fa-envelope"></i> E-mail</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row text-center">
+                <hr>
+                <p>&copy;2025 Oskar Sodel. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

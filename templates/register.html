@@ -3,62 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rejestracja</title>
+    <title>Sing up</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/stylesForm.css">
 </head>
 <body>
-    <h1>Rejestracja użytkownika</h1>
-    
-    <form method="POST" action="{{ url_for('register') }}">
-        {{ form.hidden_tag() }}
+    <div class="container">
+        <div id="registerForm">
+            <h1>Sing up</h1>
+            <p class="firstText">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+            <form method="POST" action="{{ url_for('register') }}">
+                {{ form.hidden_tag() }}
+                
+                <div>
+                    {{ form.username(placeholder="Username") }}
+                    {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
         
-        <div>
-            <label for="username">Nazwa użytkownika:</label>
-            {{ form.username() }}
-            {% if form.username.errors %}
-                {% for error in form.username.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endif %}
+                <div>
+                    {{ form.email(placeholder="Email") }}
+                    {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+        
+                <div>
+                    {{ form.password(placeholder="Password") }}
+                    {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+        
+                <div>
+                    {{ form.confirm(placeholder="Confirm password") }}
+                    {% if form.confirm.errors %}
+                        {% for error in form.confirm.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div>
+                    <input type="submit" value="Register"></input>
+                </div>
+            </form>
+            <p class="back"><a href="{{ url_for('home') }}">Back to home</a></p>
         </div>
-
-        <div>
-            <label for="email">Email:</label>
-            {{ form.email() }}
-            {% if form.email.errors %}
-                {% for error in form.email.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endif %}
-        </div>
-
-        <div>
-            <label for="password">Hasło:</label>
-            {{ form.password() }}
-            {% if form.password.errors %}
-                {% for error in form.password.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endif %}
-        </div>
-
-        <div>
-            <label for="confirm">Powtórz hasło:</label>
-            {{ form.confirm() }}
-            {% if form.confirm.errors %}
-                {% for error in form.confirm.errors %}
-                    <p>{{ error }}</p>
-                {% endfor %}
-            {% endif %}
-        </div>
-
-        <div>
-            <button type="submit">Zarejestruj</button>
-        </div>
-    </form>
-
-    <p><a href="{{ url_for('home') }}">Powrót do strony głównej</a></p>
+    </div>
 </body>
 </html>
