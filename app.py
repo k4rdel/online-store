@@ -1,12 +1,12 @@
-import os
+import os, json
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from forms import RegistrationForm, LoginForm
-from models import db, User
+from models import db, User, Product, Category
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from dotenv import load_dotenv
 
-load_dotenv()  # Załaduj zmienne środowiskowe z pliku .env
+load_dotenv()
 
 app = Flask(__name__, instance_relative_config=True)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
@@ -67,6 +67,11 @@ def home():
 @app.route('/')
 def index():
     return redirect(url_for('home'))
+
+@app.route('/products')
+def products():
+    categories = Category.query.all()
+    return render_template('products.html', categories=categories)
 
 if __name__ == '__main__':
     with app.app_context():
