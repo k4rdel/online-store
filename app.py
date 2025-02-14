@@ -1,7 +1,7 @@
 import os, json
 from flask import Flask, render_template, redirect, url_for, flash, request, session
 from forms import RegistrationForm, LoginForm
-from models import db, User, Product, Category
+from models import db, User, Product, Category, Cart, CartItem
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from dotenv import load_dotenv
@@ -72,6 +72,31 @@ def index():
 def products():
     categories = Category.query.all()
     return render_template('products.html', categories=categories)
+
+@app.route('/add_to_cart/<int:product_id>', methods=['POST'])
+@login_required
+def add_to_cart(product_id):
+    product = Product.query.get_or_404(product_id)
+    cart = Cart.query.filter_by(user_id=current_user.id).first()
+    if not cart:
+        cart = Cart(user_id=current_user.id)
+        db.session.add(cart)
+        db.session.commit()
+    cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
+    if cart_item:
+        cart_item.quantity += 1
+    else:
+        cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
+        db.session.add(cart_item)
+    db.session.commit()
+    flash('Produkt dodany do koszyka!', 'success')
+    return redirect(url_for('products'))
+
+@app.route('/cart')
+@login_required
+def cart():
+    cart = Cart.query.filter_by(user_id=current_user.id).first()
+    return render_template('cart.html', cart=cart)
 
 if __name__ == '__main__':
     with app.app_context():

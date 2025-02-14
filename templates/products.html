@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="/static/main.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/styles.css">
     <link rel="stylesheet" href="static/stylesProducts.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -59,12 +59,57 @@
                         <img src="{{ product.image_url }}" alt="{{ product.name }}">
                         <h3>{{ product.name | safe }}</h3>
                         <p id="description">{{ product.description | safe }}</p>
-                        <p>{{ product.price }} PLN</p>
-                        <a href=""><i class="glyphicon glyphicon-plus"></i></a>
+                        <p><strong>{{ product.price }} PLN</strong></p>
+                        <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+                            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add to Cart</button>
+                        </form>
                     </div>
                 {% endfor %}
             </div>
         {% endfor %}
+    </div>
+
+    <!-- cart -->
+    <div id="cartModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Your Cart</h4>
+                </div>
+                <div class="modal-body">
+                    {% if current_user.is_authenticated and current_user.cart.items %}
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in current_user.cart.items %}
+                                    <tr>
+                                        <td>{{ item.product.name }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.product.price }} PLN</td>
+                                        <td>{{ item.quantity * item.product.price }} PLN</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <h3>Total: {{ current_user.cart.items|sum(attribute='quantity') * current_user.cart.items[0].product.price }} PLN</h3>
+                    {% else %}
+                        <p>Your cart is empty.</p>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <footer class="footer">
@@ -100,10 +145,10 @@
     </footer>
 
     <div class="floating-cart">
-        <a href="/cart">
-          <i class="fas fa-shopping-cart"></i>
-          <span class="badge badge-danger" id="cart-count">1</span>
+        <a href="#" data-toggle="modal" data-target="#cartModal">
+            <span class="glyphicon glyphicon-shopping-cart"></span>
+            <span class="badge badge-danger" id="cart-count">{{ current_user.cart.items|length }}</span>
         </a>
-      </div>
+    </div>
 </body>
 </html>
