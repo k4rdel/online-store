@@ -1,5 +1,5 @@
 import os, json
-from flask import Flask, render_template, redirect, url_for, flash, request, session
+from flask import Flask, render_template, redirect, url_for, flash, request, session, jsonify
 from forms import RegistrationForm, LoginForm
 from models import db, User, Product, Category, Cart, CartItem
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -48,7 +48,8 @@ def login():
             login_user(user)
             session['username'] = user.username
             flash('Zalogowano pomyślnie!', 'success')
-            return redirect(url_for('home'))
+            next_page = request.args.get('next', request.referrer or url_for('home'))
+            return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('Nieprawidłowy email lub hasło', 'danger')
     return render_template('login.html', form=form)
@@ -57,8 +58,8 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Wylogowano pomyślnie!', 'success')
-    return render_template('index.html')
+    flash('Wylogowano pomyślnie!', 'danger')
+    return redirect(request.referrer or url_for('home'))
 
 @app.route('/home')
 def home():
@@ -74,23 +75,24 @@ def products():
     return render_template('products.html', categories=categories)
 
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
-@login_required
 def add_to_cart(product_id):
-    product = Product.query.get_or_404(product_id)
-    cart = Cart.query.filter_by(user_id=current_user.id).first()
-    if not cart:
-        cart = Cart(user_id=current_user.id)
-        db.session.add(cart)
+    if current_user.is_authenticated:
+        product = Product.query.get_or_404(product_id)
+        cart = Cart.query.filter_by(user_id=current_user.id).first()
+        if not cart:
+            cart = Cart(user_id=current_user.id)
+            db.session.add(cart)
+            db.session.commit()
+        cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
+        if cart_item:
+            cart_item.quantity += 1
+        else:
+            cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
+            db.session.add(cart_item)
         db.session.commit()
-    cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
-    if cart_item:
-        cart_item.quantity += 1
+        return jsonify({'message': 'Produkt dodany do koszyka!', 'category': 'success'})
     else:
-        cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
-        db.session.add(cart_item)
-    db.session.commit()
-    flash('Produkt dodany do koszyka!', 'success')
-    return redirect(url_for('products'))
+        return jsonify({'message': 'Musisz byc zalogowany aby dodac cos do koszyka!', 'category': 'danger'})
 
 @app.route('/cart')
 @login_required

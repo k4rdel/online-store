@@ -15,7 +15,7 @@
         <div id="loginForm">
             <h1>Sing in</h1>
             <p class="firstText">Don't have an account? <a href="{{ url_for('register') }}">Sing up</a></p>
-            <form method="POST" action="{{ url_for('login') }}">
+            <form method="POST" action="{{ url_for('login', next=request.args.get('next', request.referrer)) }}">
             {{ form.hidden_tag() }}
             
             <div>

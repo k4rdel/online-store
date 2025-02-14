@@ -290,6 +290,19 @@ footer{
     margin-top: 20
 }
 
+/* alerts */
+
+.alert {
+    position: fixed;
+    bottom: 0;
+    width: 30vh;
+    z-index: 9999 !important;
+}
+
+.alert + .container {
+    padding-bottom: 70px;
+}
+
 /* scrollbar */
 
 ::-webkit-scrollbar {

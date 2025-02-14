@@ -1,15 +1,21 @@
-.affix {
+.myaffix {
+    position: sticky;
     top: 0;
     width: 100%;
-    z-index: 9999 !important;
+    z-index: 1040 !important;
 }
 
-.affix + .container-fluid {
-padding-top: 70px;
+.myaffix + .container-fluid {
+    padding-top: 70px;
 }
 
 .navbar-left a{
     color: rgb(166, 112, 218) !important;
+}
+
+#alert-container{
+    position: fixed;
+    left: 1vh;
 }
 
 .productContainer h1{
@@ -107,4 +113,8 @@ padding-top: 70px;
     justify-content: center;
     min-width: 20px;
     min-height: 20px;
+}
+
+#cartModal{
+    z-index: 1080 !important;
 }
