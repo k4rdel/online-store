@@ -44,7 +44,7 @@
     width: 27vh;
 }
 
-.simpleProduct a{
+.simpleProduct button{
     background-color: #1a1a1a;
     border: 1px solid rgb(166, 112, 218);
     padding: 0.5vh;
@@ -53,7 +53,8 @@
     transition: 0.2s;
 }
 
-.simpleProduct a:hover{
+.simpleProduct button:hover{
+    color: rgb(235, 235, 235);
     background-color: rgba(167, 112, 218, 0.404);
     transition: 0.2s;
 }
@@ -117,4 +118,9 @@
 
 #cartModal{
     z-index: 1080 !important;
+}
+
+.modal-content{
+    background-color: #1a1a1a;
+    color: rgb(235, 235, 235);
 }

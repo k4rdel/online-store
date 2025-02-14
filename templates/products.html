@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="/static/main.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/styles.css">
     <link rel="stylesheet" href="static/stylesProducts.css">
@@ -53,7 +52,7 @@
                         <p id="description">{{ product.description | safe }}</p>
                         <p><strong>{{ product.price }} PLN</strong></p>
                         <form class="add-to-cart-form" action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
-                            <button type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i> Add to Cart</button>
+                            <button type="submit" class="btn add-to-cart-btn" data-product-id="{{ product.id }}"><i class="glyphicon glyphicon-plus"></i> Add to Cart</button>
                         </form>
                     </div>
                 {% endfor %}
@@ -71,31 +70,15 @@
                     <h4 class="modal-title">Your Cart</h4>
                 </div>
                 <div class="modal-body">
-                    {% if current_user.is_authenticated and current_user.cart.items %}
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for item in current_user.cart.items %}
-                                    <tr>
-                                        <td>{{ item.product.name }}</td>
-                                        <td>{{ item.quantity }}</td>
-                                        <td>{{ item.product.price }} PLN</td>
-                                        <td>{{ item.quantity * item.product.price }} PLN</td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                        <h3>Total: {{ current_user.cart.items|sum(attribute='quantity') * current_user.cart.items[0].product.price }} PLN</h3>
-                    {% else %}
-                        <p>Your cart is empty.</p>
-                    {% endif %}
+                    <ul>
+                        {% for item in cart.items %}
+                            <li id="product-{{ item.id }}">
+                                Produkt: {{ item.product.name | striptags }}<br>
+                                Ilość: {{ item.quantity }}
+                            </li>
+                            <button class="btn btn-danger" onclick="removeFromCart({{ item.id }})">Remove</button>
+                            {% endfor %}
+                    </ul>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -146,5 +129,7 @@
             {% endif %}
         </a>
     </div>
+
+    <script src="/static/main.js"></script>
 </body>
 </html>

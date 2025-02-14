@@ -72,27 +72,54 @@ def index():
 @app.route('/products')
 def products():
     categories = Category.query.all()
-    return render_template('products.html', categories=categories)
+    cart = Cart.query.filter_by(user_id=current_user.id).first() if current_user.is_authenticated else None
+    return render_template('products.html', categories=categories, cart=cart)
 
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
+@login_required
 def add_to_cart(product_id):
-    if current_user.is_authenticated:
-        product = Product.query.get_or_404(product_id)
-        cart = Cart.query.filter_by(user_id=current_user.id).first()
-        if not cart:
-            cart = Cart(user_id=current_user.id)
-            db.session.add(cart)
-            db.session.commit()
-        cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
-        if cart_item:
-            cart_item.quantity += 1
-        else:
-            cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
-            db.session.add(cart_item)
+    product = Product.query.get_or_404(product_id)
+    cart = Cart.query.filter_by(user_id=current_user.id).first()
+    if not cart:
+        cart = Cart(user_id=current_user.id)
+        db.session.add(cart)
         db.session.commit()
-        return jsonify({'message': 'Produkt dodany do koszyka!', 'category': 'success'})
+    cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
+    if cart_item:
+        cart_item.quantity += 1
     else:
-        return jsonify({'message': 'Musisz byc zalogowany aby dodac cos do koszyka!', 'category': 'danger'})
+        cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
+        db.session.add(cart_item)
+    db.session.commit()
+
+    total_items = sum(item.quantity for item in cart.items)
+    return jsonify({
+        'message': 'Produkt dodany do koszyka!',
+        'category': 'success',
+        'total_items': total_items,
+        'product': {
+            'id': product.id,
+            'name': product.name,
+            'quantity': cart_item.quantity,
+            'price': product.price
+        }
+    })
+    
+@app.route('/remove_from_cart/<int:item_id>', methods=['POST'])
+@login_required
+def remove_from_cart(item_id):
+    cart = Cart.query.filter_by(user_id=current_user.id).first()
+    if cart:
+        cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=item_id).first()
+        if cart_item:
+            db.session.delete(cart_item)
+            db.session.commit()
+            print(f"Produkt {item_id} został usunięty z koszyka.")
+            return jsonify({'message': 'Produkt usunięty z koszyka!', 'success': True})
+        else:
+            print(f"Produkt o ID {item_id} nie znaleziony w koszyku.")
+            return jsonify({'message': 'Produkt nie znaleziony w koszyku!', 'success': False})
+    return jsonify({'message': 'Brak koszyka użytkownika!', 'success': False})
 
 @app.route('/cart')
 @login_required

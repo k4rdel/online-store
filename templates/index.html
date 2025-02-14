@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="/static/main.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="static/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -58,20 +57,20 @@
             </div>
         </div>
         <div class="row productsRow">
-            <div class="col-lg-3 product">
+            <div class="col-lg-3 product" data-url="{{ url_for('products', _anchor='motherboards') }}">
                 <img src="/static/images/motherboard.png" alt="motherboard">
                 <h1>Motherboards</h1>
             </div>
-            <div class="col-lg-3 product">
-                <img src="/static/images/graphiccard.png" alt="motherboard">
+            <div class="col-lg-3 product" data-url="{{ url_for('products', _anchor='graphic cards') }}">
+                <img src="/static/images/graphiccard.png" alt="graphiccard">
                 <h1>GPU</h1>
             </div>
-            <div class="col-lg-3 product">
-                <img src="/static/images/harddisk.png" alt="motherboard">
+            <div class="col-lg-3 product" data-url="{{ url_for('products', _anchor='hard disks') }}">
+                <img src="/static/images/harddisk.png" alt="harddisk">
                 <h1>Hard disks</h1>
             </div>
-            <div class="col-lg-3 product">
-                <img src="/static/images/computercase.png" alt="motherboard">
+            <div class="col-lg-3 product" data-url="{{ url_for('products', _anchor='pc cases') }}">
+                <img src="/static/images/computercase.png" alt="computercase">
                 <h1>Computer cases</h1>
             </div>
         </div>
@@ -283,5 +282,7 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </div>
+
+    <script src="/static/main.js"></script>
 </body>
 </html>

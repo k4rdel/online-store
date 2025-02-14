@@ -42,4 +42,4 @@ class CartItem(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
     cart = db.relationship('Cart', backref=db.backref('items', lazy=True))
-    product = db.relationship('Product')
+    product = db.relationship('Product', lazy='joined')
