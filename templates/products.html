@@ -25,7 +25,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
-                        <li><a href=""><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
+                        <li><a href="{{ url_for('user.user_panel') }}"><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
                         <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                     {% else %}
                         <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
@@ -60,7 +60,7 @@
         {% endfor %}
     </div>
 
-    <!-- cart -->
+    <!-- cart -->    
     <div id="cartModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
@@ -71,13 +71,18 @@
                 </div>
                 <div class="modal-body">
                     <ul>
-                        {% for item in cart.items %}
-                            <li id="product-{{ item.id }}">
-                                Produkt: {{ item.product.name | striptags }}<br>
-                                Ilość: {{ item.quantity }}
-                            </li>
-                            <button class="btn btn-danger" onclick="removeFromCart({{ item.id }})">Remove</button>
+                        {% if cart.items %}
+                            {% for item in cart.items %}
+                                <li id="cart-item-{{ item.product_id }}">
+                                    Produkt: {{ item.product.name | striptags }}<br>
+                                    <span class="quantity">Ilość: {{ item.quantity }}</span><br>
+                                    Cena: {{ item.product.price }} PLN<br>
+                                    <button class="btn btn-danger" onclick="removeFromCart({{ item.product_id }})">Remove</button>
+                                </li>
                             {% endfor %}
+                        {% else %}
+                                <p id="empty-cart-message">Your cart is empty.</p>
+                        {% endif %}
                     </ul>
                 </div>
                 <div class="modal-footer">

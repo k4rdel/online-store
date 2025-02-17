@@ -19,7 +19,7 @@
             </div>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
-                        <li><a href=""><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
+                        <li><a href="{{ url_for('user.user_panel') }}"><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
                         <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logut</a></li>
                         {% else %}
                         <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>

@@ -120,7 +120,35 @@
     z-index: 1080 !important;
 }
 
+.modal-header .close{
+    color: aliceblue;
+}
+
+.modal-title{
+    text-align: center;
+    font-size: 2em;
+}
+
 .modal-content{
     background-color: #1a1a1a;
     color: rgb(235, 235, 235);
+}
+
+#empty-cart-message{
+    font-size: 1em;
+}
+
+.modal-footer button{
+    background-color: #1a1a1a;
+    border: 1px solid rgb(166, 112, 218);
+    padding: 0.5vh;
+    color: rgb(166, 112, 218);
+    border-radius: 0.51vh;
+    transition: 0.2s;
+}
+
+.modal-footer button:hover{
+    color: rgb(235, 235, 235);
+    background-color: rgba(167, 112, 218, 0.404);
+    transition: 0.2s;
 }

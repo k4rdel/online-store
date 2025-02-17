@@ -5,6 +5,7 @@ from models import db, User, Product, Category, Cart, CartItem
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from dotenv import load_dotenv
+from user_routes import user_bp
 
 load_dotenv()
 
@@ -46,8 +47,11 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
+            session['user_id'] = user.id
             session['username'] = user.username
             flash('Zalogowano pomyślnie!', 'success')
+            cart = Cart.query.filter_by(user_id=user.id).first()
+            session['cart'] = [item.product_id for item in cart.items] if cart else []
             next_page = request.args.get('next', request.referrer or url_for('home'))
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
@@ -73,6 +77,7 @@ def index():
 def products():
     categories = Category.query.all()
     cart = Cart.query.filter_by(user_id=current_user.id).first() if current_user.is_authenticated else None
+    cart_items = session.get('cart', []) if current_user.is_authenticated else []
     return render_template('products.html', categories=categories, cart=cart)
 
 @app.route('/add_to_cart/<int:product_id>', methods=['POST'])
@@ -91,6 +96,8 @@ def add_to_cart(product_id):
         cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
         db.session.add(cart_item)
     db.session.commit()
+
+    session['cart'] = [item.product_id for item in cart.items]
 
     total_items = sum(item.quantity for item in cart.items)
     return jsonify({
@@ -112,20 +119,27 @@ def remove_from_cart(item_id):
     if cart:
         cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=item_id).first()
         if cart_item:
-            db.session.delete(cart_item)
+            if cart_item.quantity > 1:
+                cart_item.quantity -= 1
+            else:
+                db.session.delete(cart_item)
             db.session.commit()
+            session['cart'] = [item.product_id for item in cart.items]
+            total_items = sum(item.quantity for item in cart.items)
             print(f"Produkt {item_id} został usunięty z koszyka.")
-            return jsonify({'message': 'Produkt usunięty z koszyka!', 'success': True})
+            return jsonify({'message': 'Produkt usunięty z koszyka!', 'category': 'success', 'quantity': cart_item.quantity if cart_item.quantity > 0 else 0})
         else:
             print(f"Produkt o ID {item_id} nie znaleziony w koszyku.")
-            return jsonify({'message': 'Produkt nie znaleziony w koszyku!', 'success': False})
-    return jsonify({'message': 'Brak koszyka użytkownika!', 'success': False})
+            return jsonify({'message': 'Produkt nie znaleziony w koszyku!', 'category': 'danger'})
+    return jsonify({'message': 'Brak koszyka użytkownika!', 'category': 'danger'})
 
 @app.route('/cart')
 @login_required
 def cart():
     cart = Cart.query.filter_by(user_id=current_user.id).first()
     return render_template('cart.html', cart=cart)
+
+app.register_blueprint(user_bp)
 
 if __name__ == '__main__':
     with app.app_context():
