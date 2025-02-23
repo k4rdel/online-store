@@ -4,8 +4,11 @@ from forms import RegistrationForm, LoginForm
 from models import db, User, Product, Category, Cart, CartItem
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from flask_admin import Admin
+from flask_admin.contrib.sqla import ModelView
 from dotenv import load_dotenv
 from user_routes import user_bp
+from admin_routers import admin_bp
 
 load_dotenv()
 
@@ -23,6 +26,17 @@ login_manager.login_view = 'login'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+class AdminModelView(ModelView):
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
+
+admin = Admin(app, name='Admin Panel', template_mode='bootstrap3')
+admin.add_view(AdminModelView(User, db.session))
+admin.add_view(AdminModelView(Product, db.session))
+admin.add_view(AdminModelView(Category, db.session))
+admin.add_view(AdminModelView(Cart, db.session))
+admin.add_view(AdminModelView(CartItem, db.session))
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -136,10 +150,14 @@ def remove_from_cart(item_id):
 @app.route('/cart')
 @login_required
 def cart():
-    cart = Cart.query.filter_by(user_id=current_user.id).first()
-    return render_template('cart.html', cart=cart)
+    if current_user.is_authenticated:
+        cart = Cart.query.filter_by(user_id=current_user.id).first()
+        return render_template('cart.html', cart=cart)
+    else:
+        return jsonify({'message': 'Musisz byc zalogowany aby dodać produkty do koszyka!', 'category': 'danger'})
 
-app.register_blueprint(user_bp)
+app.register_blueprint(user_bp, url_prefix='/user')
+app.register_blueprint(admin_bp, url_prefix='/admin') 
 
 if __name__ == '__main__':
     with app.app_context():

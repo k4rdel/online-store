@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav id="navbar" class="navbar navbar-inverse myaffix">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="{{ url_for('home')}}" class="navbar-brand">Simple Store</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('user_bp.user_panel') }}"><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
+                    <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                    <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Admin Panel</h1>
+        <h2>Users</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Admin</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.is_admin }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_bp.admin_update_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                            <input type="text" name="username" value="{{ user.username }}" required>
+                            <input type="email" name="email" value="{{ user.email }}" required>
+                            <input type="checkbox" name="is_admin" {% if user.is_admin %}checked{% endif %}>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                        <form action="{{ url_for('admin_bp.admin_delete_user', user_id=user.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Categories</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for category in categories %}
+                <tr>
+                    <td>{{ category.id }}</td>
+                    <td>{{ category.name }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_bp.admin_update_category', category_id=category.id) }}" method="POST" style="display:inline;">
+                            <input type="text" name="name" value="{{ category.name }}" required>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                        <form action="{{ url_for('admin_bp.admin_delete_category', category_id=category.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Products</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Image URL</th>
+                    <th>Category ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.image_url }}</td>
+                    <td>{{ product.category_id }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_bp.admin_update_product', product_id=product.id) }}" method="POST" style="display:inline;">
+                            <input type="text" name="name" value="{{ product.name }}" required>
+                            <input type="text" name="description" value="{{ product.description }}" required>
+                            <input type="number" name="price" value="{{ product.price }}" required>
+                            <input type="text" name="image_url" value="{{ product.image_url }}" required>
+                            <input type="number" name="category_id" value="{{ product.category_id }}" required>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                        <form action="{{ url_for('admin_bp.admin_delete_product', product_id=product.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Carts</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart in carts %}
+                <tr>
+                    <td>{{ cart.id }}</td>
+                    <td>{{ cart.user_id }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_bp.admin_delete_cart', cart_id=cart.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h2>Cart Items</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cart ID</th>
+                    <th>Product ID</th>
+                    <th>Quantity</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cart_item in cart_items %}
+                <tr>
+                    <td>{{ cart_item.id }}</td>
+                    <td>{{ cart_item.cart_id }}</td>
+                    <td>{{ cart_item.product_id }}</td>
+                    <td>{{ cart_item.quantity }}</td>
+                    <td>
+                        <form action="{{ url_for('admin_bp.admin_update_cart_item', cart_item_id=cart_item.id) }}" method="POST" style="display:inline;">
+                            <input type="number" name="quantity" value="{{ cart_item.quantity }}" required>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                        <form action="{{ url_for('admin_bp.admin_delete_cart_item', cart_item_id=cart_item.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

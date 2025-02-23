@@ -4,21 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Client's panel</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/stylesUserPanel.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
-    <h1>Client's panel</h1>
-    <p><strong>Username:</strong> {{ user.username}}</p>
-    <p><strong>Email:</strong> {{ user.email }}</p>
+    <nav id="navbar" class="navbar navbar-inverse myaffix">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="{{ url_for('home')}}" class="navbar-brand">Simple Store</a>
+            </div>
+                <ul class="nav navbar-nav navbar-left">
+                    {% for category in categories %}
+                        <li><a href="#{{ category.name | lower }}">{{ category.name }}</a></li>
+                    {% endfor %}
+                </ul>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="{{ url_for('admin_routers.admin_panel') }}"></span> Admin panel</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('user_routes.user_panel') }}"><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
+                        <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    {% else %}
+                        <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                        <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="col-lg-6">
+            <h1>Data update</h1>
+            <form action="{{ url_for('user_routes.update_user') }}" method="POST">
+                <p class="dataP">Username:</p>
+                <input type="text" id="username" name="username" placeholder="{{ user.username }}"><br>
+        
+                <p class="dataP">Email:</p>
+                <input type="email" id="email" name="email" placeholder="{{ user.email }}"><br>
+        
+                <button type="submit">Update data</button>
+            </form>
+        </div>
+        <div class="col-lg-6">
+            <h1>Change Password</h1>
+            <form action="{{ url_for('user_routes.change_password') }}" method="POST">
+                <input type="password" id="current_password" name="current_password" placeholder="Current Password" required><br>
 
-    <h2>Data update</h2>
-    <form action="/update-user" method="POST">
-        <label for="first_name">Username:</label>
-        <input type="text" id="first_name" name="first_name" value="{{ user.username }}" required><br>
+                <input type="password" id="new_password" name="new_password" placeholder="New Password" required><br>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" value="{{ user.email }}" required><br>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required><br>
 
-        <button type="submit">Update data</button>
-    </form>
+                <button type="submit">Change Password</button>
+            </form>   
+        </div>
+    </div>
+
+    <div class="container alert">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
 </body>
 </html>

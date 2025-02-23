@@ -1,0 +1,39 @@
+.col-lg-6{
+    text-align: center;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 80%;
+    padding: 10px;
+    margin: 15px 0 5px 0;
+    display: inline-block;
+    border: 1px solid rgb(117, 36, 192);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #1a1a1a;
+    transition: 0.5s;
+}
+
+button[type="submit"]{
+    width: 80%;
+    padding: 10px;
+    margin: 15px 0 5px 0;
+    display: inline-block;
+    border: 1px solid rgb(117, 36, 192);
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: rgb(117, 36, 192);
+    transition: 0.5s;
+}
+
+button[type="submit"]:hover{
+    border: 1px solid rgb(145, 74, 211);
+    background-color: rgb(145, 74, 211);
+}
+
+.dataP{
+    margin-bottom: -0.7em;
+    margin-top: 1em;
+}
