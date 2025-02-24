@@ -9,7 +9,7 @@ def admin_required(f):
     @wraps(f)
     @login_required
     def decorated_function(*args, **kwargs):
-        if not current_user.is_admin:
+        if not current_user.is_admin != 1:
             flash('You do not have permission to access this page.', 'danger')
             return redirect(url_for('home'))
         return f(*args, **kwargs)
@@ -31,7 +31,7 @@ def admin_update_user(user_id):
     user = User.query.get_or_404(user_id)
     user.username = request.form.get('username')
     user.email = request.form.get('email')
-    user.is_admin = 'is_admin' in request.form
+    user.is_admin = 1 if 'is_admin' in request.form else 0
     db.session.commit()
     flash('User updated successfully!', 'success')
     return redirect(url_for('admin_bp.admin_panel'))

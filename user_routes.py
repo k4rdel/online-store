@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash
 from flask_login import login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db
+from models import Category, db, User
 
 user_bp = Blueprint('user_routes', __name__, url_prefix='/user')
 
 @user_bp.route('/user-panel')
 @login_required
-def user_panel(): 
+def user_panel():
+    categories = Category.query.all() 
     user_data = {
         "username": current_user.username,
         "email": current_user.email
