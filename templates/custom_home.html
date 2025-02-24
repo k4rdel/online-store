@@ -1,0 +1,7 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <h1>Welcome in Admin's Panel!</h1>
+    <p>Here you can manage of database, add, update and delete all data.</p>
+    <a href="{{ url_for('user_routes.user_panel') }}">Go back?</a>
+{% endblock %}

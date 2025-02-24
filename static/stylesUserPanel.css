@@ -1,3 +1,16 @@
+#panels{
+    height: 100vh;
+}
+
+#title{
+    text-align: center;
+    font-size: 4em;
+}
+
+#panels .row{
+    margin-bottom: 4em;
+}
+
 .col-lg-6{
     text-align: center;
 }
@@ -36,4 +49,8 @@ button[type="submit"]:hover{
 .dataP{
     margin-bottom: -0.7em;
     margin-top: 1em;
+}
+
+footer{
+    margin-top: 0;
 }

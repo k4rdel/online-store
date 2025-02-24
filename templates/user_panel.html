@@ -23,9 +23,11 @@
                         <li><a href="#{{ category.name | lower }}">{{ category.name }}</a></li>
                     {% endfor %}
                 </ul>
+                {% if current_user.is_authenticated and current_user.is_admin == 1 %}
                 <ul class="nav navbar-nav navbar-left">
-                    <li><a href="{{ url_for('admin_bp.admin_panel') }}"></span> Admin panel</a></li>
+                    <li><a href="{{ url_for('admin_bp.admin_panel') }}" style="color: red;"></span> Admin panel</a></li>
                 </ul>
+                {% endif %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_authenticated %}
                         <li><a href="{{ url_for('user_routes.user_panel') }}"><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
@@ -38,30 +40,59 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <div class="col-lg-6">
-            <h1>Data update</h1>
-            <form action="{{ url_for('user_routes.update_user') }}" method="POST">
-                <p class="dataP">Username:</p>
-                <input type="text" id="username" name="username" placeholder="{{ user.username }}"><br>
-        
-                <p class="dataP">Email:</p>
-                <input type="email" id="email" name="email" placeholder="{{ user.email }}"><br>
-        
-                <button type="submit">Update data</button>
-            </form>
+    <div class="container" id="panels">
+        <h1 id="title">Client's panel</h1>
+        <div class="row">
+            <div class="col-lg-6">
+                <h1>Data update</h1>
+                <form action="{{ url_for('user_routes.update_user') }}" method="POST">
+                    <p class="dataP">Username:</p>
+                    <input type="text" id="username" name="username" placeholder="{{ user.username }}"><br>
+            
+                    <p class="dataP">Email:</p>
+                    <input type="email" id="email" name="email" placeholder="{{ user.email }}"><br>
+            
+                    <button type="submit">Update data</button>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <h1>Change Password</h1>
+                <form action="{{ url_for('user_routes.change_password') }}" method="POST">
+                    <input type="password" id="current_password" name="current_password" placeholder="Current Password" required><br>
+    
+                    <input type="password" id="new_password" name="new_password" placeholder="New Password" required><br>
+    
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required><br>
+    
+                    <button type="submit">Change Password</button>
+                </form>   
+            </div>
         </div>
-        <div class="col-lg-6">
-            <h1>Change Password</h1>
-            <form action="{{ url_for('user_routes.change_password') }}" method="POST">
-                <input type="password" id="current_password" name="current_password" placeholder="Current Password" required><br>
-
-                <input type="password" id="new_password" name="new_password" placeholder="New Password" required><br>
-
-                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required><br>
-
-                <button type="submit">Change Password</button>
-            </form>   
+        <div class="row">
+            <div class="col-lg-6">
+                <h1>Data update</h1>
+                <form action="{{ url_for('user_routes.update_user') }}" method="POST">
+                    <p class="dataP">Username:</p>
+                    <input type="text" id="username" name="username" placeholder="{{ user.username }}"><br>
+            
+                    <p class="dataP">Email:</p>
+                    <input type="email" id="email" name="email" placeholder="{{ user.email }}"><br>
+            
+                    <button type="submit">Update data</button>
+                </form>
+            </div>
+            <div class="col-lg-6">
+                <h1>Change Password</h1>
+                <form action="{{ url_for('user_routes.change_password') }}" method="POST">
+                    <input type="password" id="current_password" name="current_password" placeholder="Current Password" required><br>
+    
+                    <input type="password" id="new_password" name="new_password" placeholder="New Password" required><br>
+    
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required><br>
+    
+                    <button type="submit">Change Password</button>
+                </form>   
+            </div>
         </div>
     </div>
 
@@ -80,5 +111,37 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                    <h5>About Us</h5>
+                    <p>We provide high-quality PC components and build guides for gamers, creators, and professionals.</p>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#navbar">Home</a></li>
+                        <li><a href="#">Shop</a></li>
+                        <li><a href="#tutorial">How to Build PC</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                    <h5>Follow Us</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/k4rdel/" class="social-icon"><i class="fa fa-lg fa-github"></i> Github</a></li>
+                        <li><a href="https://www.linkedin.com/in/oskar-sodel-80b363299/" class="social-icon"><i class="fa fa-lg fa-linkedin"></i> Linkedin</a></li>
+                        <li><a href="mailto:sodeloskar22@gmail.com" class="social-icon"><i class="fa fa-lg fa-envelope"></i> E-mail</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row text-center">
+                <hr>
+                <p>&copy;2025 Oskar Sodel. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>

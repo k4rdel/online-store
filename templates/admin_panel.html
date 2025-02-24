@@ -13,9 +13,6 @@
 <body>
     <nav id="navbar" class="navbar navbar-inverse myaffix">
         <div class="container-fluid">
-            <div class="navbar-header">
-                <a href="{{ url_for('home')}}" class="navbar-brand">Simple Store</a>
-            </div>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('user_bp.user_panel') }}"><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
