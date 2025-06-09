@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    <title>Order panel</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="static/styles.css">
-    <link rel="stylesheet" href="static/stylesProducts.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='/stylesUserPanel.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 </head>
 <body>
@@ -35,41 +35,9 @@
             </div>
         </div>
     </nav>
-
-    <div id="alert-container"></div>
-
-    <div class="container productContainer">
-        <h1>Your Dream PC Starts Here</h1>
-        <p id="firstDescription">Browse our wide selection of high-performance PC components and ready-to-go setups. Find exactly what you need, whether you're gaming, creating, or working!</p>
-        <hr>
-        {% for category in categories %}
-            <h2 class="categoryName" id="{{ category.name | lower }}">{{ category.name }}</h2>
-            <div class="row">
-                {% for product in category.products %}
-                    <div class="col-lg-3 simpleProduct">
-                        <img src="{{ product.image_url }}" alt="{{ product.name }}">
-                        <h3>{{ product.name | safe }}</h3>
-                        <p id="description">{{ product.description | safe }}</p>
-                        <p><strong>{{ product.price }} PLN</strong></p>
-                        <form class="add-to-cart-form" action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
-                            <button type="submit" class="btn add-to-cart-btn" data-product-id="{{ product.id }}"><i class="glyphicon glyphicon-plus"></i> Add to Cart</button>
-                        </form>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
-    </div>
-
-    <!-- cart -->    
-    <div id="cartModal" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Your Cart</h4>
-                </div>
-                <div class="modal-body">
+    <div class="container" id="panels">
+        <h1 id="title">Your order</h1>
+        <div class="modal-body">
                     <ul id="cart-items-list">
                         {% if cart.items %}
                             {% for item in cart.items %}
@@ -85,12 +53,7 @@
                         {% endif %}
                     </ul>
                 </div>
-                <div class="modal-footer">
-                    <a href="{{ url_for('order') }}" id="buyButton" type="button" class="btn btn-default">Buy</a>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <footer class="footer">
@@ -124,34 +87,5 @@
             </div>
         </div>
     </footer>
-
-    <div class="floating-cart">
-        {% if current_user.is_authenticated %}
-            <span id="cart-count">{{ cart.items|sum(attribute='quantity') if cart else 0 }}</span>
-        {% else %}
-            <span id="cart-count">0</span>
-        {% endif %}
-        <a href="#" data-toggle="modal" data-target="#cartModal">
-            <span class="glyphicon glyphicon-shopping-cart"></span>
-        </a>
-    </div>
-
-    <div class="container alert">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </div>
-
-    <script src="/static/main.js"></script>
 </body>
 </html>

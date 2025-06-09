@@ -99,6 +99,19 @@
     font-size: 24px;
 }
 
+#cart-count {
+    display: block;
+    background-color: red;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-radius: 50%;
+    width: 1.6em;
+    height: 1.6em;
+    text-align: center;
+    font-weight: bold;
+}
+
 .badge-danger {
     display: none;
     position: absolute;
@@ -150,5 +163,21 @@
 .modal-footer button:hover{
     color: rgb(235, 235, 235);
     background-color: rgba(167, 112, 218, 0.404);
+    transition: 0.2s;
+}
+
+.modal-footer #buyButton{
+    float: left;
+    background-color: #1a1a1a;
+    border: 1px solid rgb(20, 155, 33);
+    padding: 0.5vh;
+    color: rgb(20, 155, 33);
+    border-radius: 0.51vh;
+    transition: 0.2s;
+}
+
+.modal-footer #buyButton:hover{
+    color: rgb(235, 235, 235);
+    background-color: rgba(20, 155, 34, 0.404);
     transition: 0.2s;
 }

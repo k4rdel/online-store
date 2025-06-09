@@ -138,15 +138,15 @@ def remove_from_cart(item_id):
     if cart:
         cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=item_id).first()
         if cart_item:
-            if cart_item.quantity > 1:
+            if cart_item.quantity >= 1:
                 cart_item.quantity -= 1
-            else:
+            if cart_item.quantity == 0:
                 db.session.delete(cart_item)
             db.session.commit()
             session['cart'] = [item.product_id for item in cart.items]
             total_items = sum(item.quantity for item in cart.items)
             print(f"Produkt {item_id} został usunięty z koszyka.")
-            return jsonify({'message': 'Produkt usunięty z koszyka!', 'category': 'success', 'quantity': cart_item.quantity if cart_item.quantity > 0 else 0})
+            return jsonify({'message': 'Produkt usunięty z koszyka!', 'category': 'success', 'quantity': cart_item.quantity if cart_item.quantity > 0 else 0, 'total_items': total_items})
         else:
             print(f"Produkt o ID {item_id} nie znaleziony w koszyku.")
             return jsonify({'message': 'Produkt nie znaleziony w koszyku!', 'category': 'danger'})
@@ -160,6 +160,16 @@ def cart():
         return render_template('cart.html', cart=cart)
     else:
         return jsonify({'message': 'Musisz byc zalogowany aby dodać produkty do koszyka!', 'category': 'danger'})
+    
+@app.route('/order')
+@login_required
+def order():
+    if current_user.is_authenticated:
+        cart = Cart.query.filter_by(user_id=current_user.id).first()
+        return render_template('order.html', cart=cart)
+    else:
+        return jsonify({'message': 'Musisz byc zalogowany aby złożyć zamówienie!', 'category': 'danger'})
+
 
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(admin_bp, url_prefix='/admin') 
