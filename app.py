@@ -71,8 +71,8 @@ def login():
             flash('Zalogowano pomyślnie!', 'success')
             cart = Cart.query.filter_by(user_id=user.id).first()
             session['cart'] = [item.product_id for item in cart.items] if cart else []
-            next_page = request.args.get('next', request.referrer or url_for('home'))
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+            # next_page = request.args.get('next', request.referrer or url_for('home'))
+            return redirect(url_for('home'))
         else:
             flash('Nieprawidłowy email lub hasło', 'danger')
     return render_template('login.html', form=form)
