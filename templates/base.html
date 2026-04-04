@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} - Online Store</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    {% block header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% endblock %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+</head>
+
+<nav id="navbar" class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="{{ url_for('home')}}" class="navbar-brand">Simple Store</a>
+            </div>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('user_routes.user_panel') }}"><span class="glyphicon glyphicon-user"></span> <strong>Welcome {{ session.username }}</strong></a></li>
+                        <li><a href="{{ url_for('logout') }}"><span class="glyphicon glyphicon-log-out"></span> Logut</a></li>
+                        {% else %}
+                        <li><a href="{{ url_for('register') }}"><span class="glyphicon glyphicon-user"></span> Register</a></li>
+                        <li><a href="{{ url_for('login') }}"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+{% block content %}{% endblock %}
+
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                <h5>About Us</h5>
+                <p>We provide high-quality PC components and build guides for gamers, creators, and professionals.</p>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                <h5>Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#navbar">Home</a></li>
+                    <li><a href="#">Shop</a></li>
+                    <li><a href="#tutorial">How to Build PC</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 text-center">
+                <h5>Follow Us</h5>
+                <ul class="list-unstyled">
+                    <li><a href="https://github.com/k4rdel/" class="social-icon"><i class="fa fa-lg fa-github"></i> Github</a></li>
+                    <li><a href="https://www.linkedin.com/in/oskar-sodel-80b363299/" class="social-icon"><i class="fa fa-lg fa-linkedin"></i> Linkedin</a></li>
+                    <li><a href="mailto:sodeloskar22@gmail.com" class="social-icon"><i class="fa fa-lg fa-envelope"></i> E-mail</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row text-center">
+            <hr>
+            <p>&copy;2025 Oskar Sodel. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<div class="container alert">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<script src="main.js"></script>
