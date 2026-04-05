@@ -160,7 +160,7 @@ def cart():
         return render_template('cart.html', cart=cart)
     else:
         return jsonify({'message': 'Musisz byc zalogowany aby dodać produkty do koszyka!', 'category': 'danger'})
-    
+
 @app.route('/order')
 @login_required
 def order():
@@ -169,7 +169,6 @@ def order():
         return render_template('order.html', cart=cart)
     else:
         return jsonify({'message': 'Musisz byc zalogowany aby złożyć zamówienie!', 'category': 'danger'})
-
 
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(admin_bp, url_prefix='/admin') 
