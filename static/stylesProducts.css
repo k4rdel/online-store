@@ -29,104 +29,133 @@
     text-align: center;
 }
 
-.simpleProduct{
-    background-color: #1a1a1a;
-    padding: 3vh;
-    border-radius: 2vh;
-    width: 33vh;
-    height: 100%;
-    margin-right: 4vh;
-    box-shadow: 0 0 10px #1a1a1aa2;
+.display-flex-row {
+    display: flex;
+    flex-wrap: wrap;
 }
 
-.simpleProduct img{
-    border-radius: 1vh;
-    width: 27vh;
-}
-
-.simpleProduct button{
-    background-color: #1a1a1a;
-    border: 1px solid rgb(166, 112, 218);
-    padding: 0.5vh;
-    color: rgb(166, 112, 218);
-    border-radius: 0.51vh;
-    transition: 0.2s;
-}
-
-.simpleProduct button:hover{
-    color: rgb(235, 235, 235);
-    background-color: rgba(167, 112, 218, 0.404);
-    transition: 0.2s;
-}
-
-.simpleProduct h3{
-    font-weight: bold;
-}
-
-#description{
-    line-height: 160%;
-}
-
-.categoryName{
-    margin: 10vh 0 3vh 0;
-    color: rgb(166, 112, 218);
-}
-
-.floating-cart {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgb(117, 36, 192);
-    color: white;
+.simpleProduct {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
     padding: 15px;
-    border-radius: 50%;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.simpleProduct:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.product-img-container {
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 15px;
+    background: #fff;
+    border-radius: 4px;
+    padding: 10px;
 }
-  
-.floating-cart:hover {
-    transform: scale(1.1);
-    background-color: rgb(68, 21, 112);
+
+.product-img-container img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
 }
-  
-.floating-cart a {
-    color: white;
-    text-decoration: none;
+
+.simpleProduct h3 {
+    font-size: 1.1em;
+    height: 3em;
+    overflow: hidden;
+    margin-top: 10px;
+}
+
+.product-description {
+    font-size: 0.9em;
+    color: #aaa;
+    height: 4em;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.price-tag {
+    font-size: 1.2em;
+    color: #00ff88; 
+    margin-top: auto;
+}
+
+.add-to-cart-btn {
+    background-color: rgb(166, 112, 218);
+    border: none;
+    padding: 10px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.add-to-cart-btn:hover{
+    background-color: transparent;
+    border: 1px solid rgb(166, 112, 218);
+    transition: 0.3s;
+}
+
+.categoryName{
+    font-size: 3rem;
+    margin: 10vh 0 3vh 0;
+    color: rgb(255, 255, 255);
+}
+
+.floating-cart-wrapper {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.floating-cart-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 65px;
+    height: 65px;
+    background-color: rgb(166, 112, 218);
+    color: white !important;
+    border-radius: 50%;
+    text-decoration: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.floating-cart-btn i {
     font-size: 24px;
 }
 
-#cart-count {
-    display: block;
-    background-color: red;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    border-radius: 50%;
-    width: 1.6em;
-    height: 1.6em;
-    text-align: center;
-    font-weight: bold;
-}
-
-.badge-danger {
-    display: none;
+.cart-badge {
     position: absolute;
     top: -5px;
-    right: -10px;
-    background-color: red;
+    right: -5px;
+    background-color: #ff4757;
     color: white;
-    border-radius: 50%;
-    padding: 5px 7px;
     font-size: 12px;
     font-weight: bold;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 11px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 20px;
-    min-height: 20px;
+    padding: 0 6px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.floating-cart-btn:hover {
+    transform: scale(1.1);
+    background-color: rgb(104, 73, 134);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 #cartModal{

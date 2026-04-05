@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Twój Koszyk{% endblock %}
+
+{% block header %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesCart.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="cart-container">
+        <h2><i class="glyphicon glyphicon-shopping-cart"></i> Twój Koszyk</h2>
+        <hr>
+
+        <div id="cart-items-list">
+            {% if cart and cart.items %}
+                {% set total = 0 %}
+                {% for item in cart.items %}
+                    <div class="cart-item" id="product-row-{{ item.product.id }}">
+                        <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+                        
+                        <div class="item-details">
+                            <h4>{{ item.product.name | truncate(50) }}</h4>
+                            <p class="text-muted small">ID Produktu: #{{ item.product.id }}</p>
+                        </div>
+
+                        <div class="quantity-controls">
+                            <button class="btn-qty btn-remove" data-id="{{ item.product.id }}">-</button>
+                            <span id="qty-{{ item.product.id }}">{{ item.quantity }}</span>
+                            <button class="btn-qty btn-add" data-id="{{ item.product.id }}">+</button>
+                        </div>
+
+                        <div class="item-price">
+                            <span class="unit-price" data-price="{{ item.product.price }}">
+                                {{ "%.2f"|format(item.product.price * item.quantity) }} EUR
+                            </span>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-cart-msg">
+                    <h3>Twój koszyk jest pusty.</h3>
+                    <a href="{{ url_for('products') }}" class="btn btn-primary">Wróć do sklepu</a>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if cart and cart.items %}
+        <div class="cart-summary" id="cart-summary-section">
+            <h4>Suma całkowita:</h4>
+            <div class="total-amount"><span id="final-total">
+                {{ "%.2f"|format(cart.items | sum(attribute='quantity') * 0) }} {% set total_sum = [] %}
+                {% for item in cart.items %}
+                    {% if total_sum.append(item.product.price * item.quantity) %}{% endif %}
+                {% endfor %}
+                {{ "%.2f"|format(total_sum | sum) }}
+            </span> EUR</div>
+            <a href="#" class="btn-checkout">Przejdź do zamówienia</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('.btn-remove').forEach(button => {
+    button.addEventListener('click', function() {
+        const productId = this.getAttribute('data-id');
+        
+        fetch(`/remove_from_cart/${productId}`, {
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.category === 'success') {
+                const qtySpan = document.getElementById(`qty-${productId}`);
+                const row = document.getElementById(`product-row-${productId}`);
+                
+                if (data.quantity <= 0) {
+                    row.remove();
+                    if (data.total_items === 0) location.reload();
+                } else {
+                    qtySpan.innerText = data.quantity;
+                }
+                
+                const globalCount = document.getElementById('cart-count');
+                if (globalCount) globalCount.innerText = data.total_items;
+                
+                location.reload(); 
+            }
+        });
+    });
+});
+
+</script>
+{% endblock %}

@@ -71,8 +71,8 @@ def login():
             flash('Zalogowano pomyślnie!', 'success')
             cart = Cart.query.filter_by(user_id=user.id).first()
             session['cart'] = [item.product_id for item in cart.items] if cart else []
-            next_page = request.args.get('next', request.referrer or url_for('home'))
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+            # next_page = request.args.get('next', request.referrer or url_for('home'))
+            return redirect(url_for('home'))
         else:
             flash('Nieprawidłowy email lub hasło', 'danger')
     return render_template('login.html', form=form)
@@ -90,7 +90,11 @@ def home():
 
 @app.route('/')
 def index():
-    return redirect(url_for('home'))
+    categories = Category.query.all()
+    cart = None
+    if current_user.is_authenticated:
+        cart = Cart.query.filter_by(user_id=current_user.id).first()
+    return render_template('index.html', categories=categories, cart=cart)
 
 @app.route('/products')
 def products():
@@ -103,32 +107,27 @@ def products():
 @login_required
 def add_to_cart(product_id):
     product = Product.query.get_or_404(product_id)
+    
     cart = Cart.query.filter_by(user_id=current_user.id).first()
     if not cart:
         cart = Cart(user_id=current_user.id)
         db.session.add(cart)
-        db.session.commit()
+        db.session.flush()
+
     cart_item = CartItem.query.filter_by(cart_id=cart.id, product_id=product.id).first()
     if cart_item:
         cart_item.quantity += 1
     else:
         cart_item = CartItem(cart_id=cart.id, product_id=product.id, quantity=1)
         db.session.add(cart_item)
+
     db.session.commit()
 
-    session['cart'] = [item.product_id for item in cart.items]
+    total_items = db.session.query(db.func.sum(CartItem.quantity)).filter(CartItem.cart_id == cart.id).scalar() or 0
 
-    total_items = sum(item.quantity for item in cart.items)
     return jsonify({
-        'message': 'Produkt dodany do koszyka!',
-        'category': 'success',
-        'total_items': total_items,
-        'product': {
-            'id': product.id,
-            'name': product.name,
-            'quantity': cart_item.quantity,
-            'price': product.price
-        }
+        'message': f'Dodano {product.name} do koszyka!',
+        'total_items': int(total_items)
     })
     
 @app.route('/remove_from_cart/<int:item_id>', methods=['POST'])
@@ -160,7 +159,7 @@ def cart():
         return render_template('cart.html', cart=cart)
     else:
         return jsonify({'message': 'Musisz byc zalogowany aby dodać produkty do koszyka!', 'category': 'danger'})
-
+    
 @app.route('/order')
 @login_required
 def order():
@@ -169,6 +168,7 @@ def order():
         return render_template('order.html', cart=cart)
     else:
         return jsonify({'message': 'Musisz byc zalogowany aby złożyć zamówienie!', 'category': 'danger'})
+
 
 app.register_blueprint(user_bp, url_prefix='/user')
 app.register_blueprint(admin_bp, url_prefix='/admin') 
